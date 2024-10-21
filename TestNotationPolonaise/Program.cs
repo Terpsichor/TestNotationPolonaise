@@ -5,6 +5,90 @@ namespace TestNotationPolonaise
     class Program
     {
         /// <summary>
+        /// Effectue le calcul d'une notation polonaise
+        /// </summary>
+        /// <param name="formule">la formule à calculer</param>
+        /// <returns></returns>
+        static float Polonaise(String formule)
+        {
+            // declarations
+            string[] tab = formule.Split(' ');
+            int taille = tab.Length;
+            float val1, val2, result = 0;
+
+            // Boucle sur le tableau de la formule
+            for (int i = (taille - 1); i >= 0; i--)
+            {
+                try
+                {
+                    // Ne fait des opérations que si l'élément est un signe
+                    if (tab[i] == "+" || tab[i] == "-" || tab[i] == "/" || tab[i] == "*" )
+                    {
+                        val1 = float.Parse(tab[i + 1]);
+                        val2 = float.Parse(tab[i + 2]);
+
+                        // addition
+                        if (tab[i] == "+")
+                        {
+                            result = val1 + val2;
+                        }
+
+                        // soustraction
+                        if (tab[i] == "-")
+                        {
+                            result = val1 - val2;
+                        }
+
+                        // division
+                        if (tab[i] == "/")
+                        {
+                            result = val1 / val2;
+                            // empêche la division par zero
+                            if (val2 == 0)
+                            {
+                                return float.NaN;
+                            }
+                        }
+
+                        // multiplication
+                        if (tab[i] == "*")
+                        {
+                            result = val1 * val2;
+                        }
+
+                        // assignation du resultat à la place du signe
+                        tab[i] = result.ToString();
+
+                        // effacage des éléments utilisés
+                        tab[i + 1] = " ";
+                        tab[i + 2] = " ";
+
+                        // décalage des éléments suivants de deux
+                        for (int j = (i + 1); j < taille - 2; j++)
+                        {
+                            tab[j] = tab[j + 2];
+                            tab[j + 2] = " ";
+                        }
+                    }
+                }
+                catch
+                {
+                    return float.NaN;   
+                }
+            }
+            // check si les autres cases du tableaux sont vides
+            for (int i = 1; i < taille; i++)
+            {
+                if (tab[i] != " ")
+                {
+                    return float.NaN;
+                }
+            }
+
+            return float.Parse(tab[0]);
+        }
+
+        /// <summary>
         /// saisie d'une réponse d'un caractère parmi 2
         /// </summary>
         /// <param name="message">message à afficher</param>
